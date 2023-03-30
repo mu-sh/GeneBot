@@ -48,11 +48,16 @@ def main():
     st.title("GeneBot")
 
     # Define the chat UI
-    st.write("Welcome to GeneBot! Please enter your message below:")
-    user_input = st.text_input("User:")
+    chat_history = st.empty()
+    chat_input = st.text_input("User:")
     if st.button("Send"):
-        message = chatbot.generate_response(user_input)
-        st.write(f"{message['role']}: {message['content']}")
+        message = chatbot.generate_response(chat_input)
+        chat_history.write(f"{message['role']}: {message['content']}")
+        chat_input.text_input = ""
+
+    # Display chat history
+    for message in chatbot.chat_history:
+        chat_history.write(f"{message['role']}: {message['content']}")
 
     # Save chat history to file
     chatbot.save_chat_history(chat_history_file)
